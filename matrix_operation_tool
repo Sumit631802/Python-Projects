@@ -1,0 +1,78 @@
+import numpy as np
+
+def get_matrix_input(name):
+    """Get matrix input from user."""
+    rows = int(input(f"Enter number of rows for {name}: "))
+    cols = int(input(f"Enter number of columns for {name}: "))
+    print(f"Enter elements of {name} row by row, separated by spaces:")
+    matrix = []
+    for i in range(rows):
+        row = list(map(float, input(f"Row {i+1}: ").split()))
+        while len(row) != cols:
+            print(f"Please enter exactly {cols} values.")
+            row = list(map(float, input(f"Row {i+1}: ").split()))
+        matrix.append(row)
+    return np.array(matrix)
+
+def display_matrix(matrix, title="Matrix"):
+    print(f"\n{title}:")
+    print(matrix)
+
+def matrix_operations():
+    print("==== Matrix Operations Tool ====")
+    
+    while True:
+        print("\nSelect an operation:")
+        print("1. Addition")
+        print("2. Subtraction")
+        print("3. Multiplication")
+        print("4. Transpose")
+        print("5. Determinant")
+        print("6. Exit")
+        
+        choice = input("Enter choice (1-6): ")
+
+        if choice in ['1', '2', '3']:
+            mat1 = get_matrix_input("Matrix A")
+            mat2 = get_matrix_input("Matrix B")
+            if choice == '1':
+                if mat1.shape == mat2.shape:
+                    result = mat1 + mat2
+                    display_matrix(result, "A + B")
+                else:
+                    print("Error: Matrices must have the same dimensions for addition.")
+            elif choice == '2':
+                if mat1.shape == mat2.shape:
+                    result = mat1 - mat2
+                    display_matrix(result, "A - B")
+                else:
+                    print("Error: Matrices must have the same dimensions for subtraction.")
+            elif choice == '3':
+                if mat1.shape[1] == mat2.shape[0]:
+                    result = np.dot(mat1, mat2)
+                    display_matrix(result, "A × B")
+                else:
+                    print("Error: Number of columns in A must match rows in B for multiplication.")
+        
+        elif choice == '4':
+            mat = get_matrix_input("Matrix")
+            result = mat.T
+            display_matrix(result, "Transpose")
+        
+        elif choice == '5':
+            mat = get_matrix_input("Square Matrix")
+            if mat.shape[0] == mat.shape[1]:
+                det = np.linalg.det(mat)
+                print(f"\nDeterminant: {det}")
+            else:
+                print("Error: Determinant can only be calculated for square matrices.")
+        
+        elif choice == '6':
+            print("Exiting... Goodbye!")
+            break
+        
+        else:
+            print("Invalid choice. Please select again.")
+
+if __name__ == "__main__":
+    matrix_operations()
